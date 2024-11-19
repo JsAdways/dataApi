@@ -4,7 +4,7 @@ composer require jsadways/dataapi
 ## Edit .env file
 if you use the old repository version add this to .env file
 ```
-repository_version=0
+REPOSITORY_VERSION=0
 ```
 
 ## The defined route url in this package
