@@ -5,6 +5,7 @@ namespace Jsadways\DataApi\Services\SystemHost;
 use App\Exceptions\ServiceException;
 use Exception;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Jsadways\DataApi\Core\Service\SystemHost\Contracts\SystemHostContract;
@@ -28,16 +29,22 @@ class SystemHostService implements SystemHostContract
     public function list(): SystemHostContract
     {
         // TODO: Implement list() method.
-        $payload = [
-            'repository' => 'systemRepository',
-            'condition' => json_encode(['filter'=>[],'pre_page'=>0])
-        ];
-        $result = Http::get($this->hr_host_url,$payload)->json();
-        if(empty($result) || $result['status_code'] !== 200){
-            throw new ServiceException('HR host URL not found');
-        }
+        if(Cache::has('data_api_system_list')){
+            $this->system_list = Cache::get('data_api_system_list');
+        }else{
+            $payload = [
+                'repository' => 'systemRepository',
+                'condition' => json_encode(['filter'=>[],'pre_page'=>0])
+            ];
+            $result = Http::get($this->hr_host_url,$payload)->json();
+            if(empty($result) || $result['status_code'] !== 200){
+                throw new ServiceException('HR host URL not found');
+            }
 
-        $this->system_list = Collect($result['data']);
+            $this->system_list = Collect($result['data']);
+
+            Cache::put('data_api_system_list',$this->system_list,now()->addHours(24));
+        }
 
         return $this;
     }
