@@ -4,7 +4,7 @@ namespace Jsadways\DataApi\Controllers;
 
 use App\Core\Repository\ReadListParamsDto;
 use App\Exceptions\ServiceException;
-use App\Traits\UseRepository;
+use Jsadways\DataApi\Traits\UseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
