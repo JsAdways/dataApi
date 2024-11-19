@@ -1,13 +1,13 @@
-##Install
+## Install
 composer require jsadways/dataapi
 
-##Edit .env file
+## Edit .env file
 if you use the old repository version add this to .env file
 ```
 repository_version=0
 ```
 
-##The defined route url in this package
+## The defined route url in this package
 1. Used in local backend, to receive request from frontend and pass request to the second url below in another system
 
 `POST` `/api/data_api/fetch`
@@ -53,7 +53,7 @@ repository_version=0
 }
 ```
 
-##Examples
+## Examples
 `code`
 ```
 axios.post('local_backend/api/data_api/fetch',{
@@ -109,6 +109,3 @@ where id_number column equals to '27743336'
     ]
 }
 ```
-
-
-
