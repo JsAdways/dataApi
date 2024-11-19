@@ -1,0 +1,23 @@
+{
+    "name": "jsadways/data-api",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Jsadways\\DataApi\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jsadways\\DataApi\\Providers\\DataApiServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "Js-Adways",
+            "email": "it@js-adways.com.tw"
+        }
+    ],
+    "require": {}
+}
