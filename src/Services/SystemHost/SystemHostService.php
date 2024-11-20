@@ -33,7 +33,7 @@ class SystemHostService implements SystemHostContract
             $this->system_list = Cache::get('data_api_system_list');
         }else{
             $payload = [
-                'repository' => 'systemRepository',
+                'repository' => 'SystemRepository',
                 'condition' => json_encode(['filter'=>[],'pre_page'=>0])
             ];
             $result = Http::get($this->hr_host_url,$payload)->json();
