@@ -54,6 +54,8 @@ REPOSITORY_VERSION=0
 ```
 
 ## Examples
+1. Call route url post from frontend
+
 `code`
 ```
 axios.post('local_backend/api/data_api/fetch',{
@@ -108,4 +110,35 @@ where id_number column equals to '27743336'
         }
     ]
 }
+```
+
+2. Call Service from backend system
+
+`code`
+- use service
+
+```
+use Jsadways\DataApi\Services\Cross\CrossDto;
+use Jsadways\DataApi\Services\Cross\CrossService;
+
+$payload = [
+        'system' => 'crm',
+        'repository' => 'customer',
+        'condition' => '{"filter":{"id_number_eq":"27743336"},"per_page":"0"}'
+];
+$result = (new CrossService())->fetch(new CrossDto(...$payload));
+```
+
+- use static method
+
+```
+use Jsadways\DataApi\Services\Cross\CrossDto;
+use Jsadways\DataApi\Facades\CrossServer;
+
+$payload = [
+        'system' => 'crm',
+        'repository' => 'customer',
+        'condition' => '{"filter":{"id_number_eq":"27743336"},"per_page":"0"}'
+];
+$result = CrossServer::fetch(new CrossDto(...$payload));
 ```

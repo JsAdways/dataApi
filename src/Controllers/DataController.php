@@ -3,13 +3,11 @@
 namespace Jsadways\DataApi\Controllers;
 
 use App\Core\Repository\ReadListParamsDto;
-use App\Exceptions\ServiceException;
 use Jsadways\DataApi\Traits\UseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Http;
 use Throwable;
-use Jsadways\DataApi\Services\SystemHost\SystemHostService;
+use Jsadways\DataApi\Services\Cross\CrossService;
 use App\Repositories\RepositoryManager;
 
 class DataController
@@ -18,27 +16,7 @@ class DataController
     public function fetch(Request $request): array
     {
         try {
-            //驗證
-            $payload = $request->validate(
-                [
-                    'system' => 'string|required',
-                    'repository' => 'string|required',
-                    'condition' => 'json|required',
-                ]
-            );
-            //取得全系統URL，比對系統API URL
-            $system_host = new SystemHostService();
-            $api_url = $system_host->list()->get_api_url($payload['system']);
-
-            //取得資料
-            unset($payload['system']);
-            $result = Http::get($api_url,$payload)->json();
-            if(empty($result) || $result['status_code'] !== 200){
-                $message = (empty($result)) ? 'Undefined Error' : $result['data'];
-                throw new ServiceException($message);
-            }
-            return ['status_code' => $result['status_code'], 'data' => $result['data']];
-
+            return (new CrossService())->fetch($request);
         }catch (Throwable $throwable){
             $status_code = (isset($throwable->error_code)) ? $throwable->error_code : 503;
             $content = $throwable->getMessage();
