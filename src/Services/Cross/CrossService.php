@@ -7,6 +7,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Jsadways\DataApi\Core\Service\Cross\Contracts\CrossContract;
+use Jsadways\DataApi\Services\Data\DataDto;
+use Jsadways\DataApi\Services\Data\DataService;
 use Jsadways\DataApi\Services\SystemHost\SystemHostService;
 use Throwable;
 
@@ -21,8 +23,7 @@ class CrossService implements CrossContract
         // TODO: Implement fetch() method.
         try {
             //準備以及驗證資料
-            $request = $this->_prepare($payload);
-            $payload = $this->_validate($request);
+            $payload = $this->_prepare($payload);
 
             //取得全系統URL，比對系統API URL
             $system_host = new SystemHostService();
@@ -30,13 +31,10 @@ class CrossService implements CrossContract
 
             //取得資料
             unset($payload['system']);
-            $result = Http::get($api_url, $payload)->json();
-            if (empty($result) || $result['status_code'] !== 200) {
-                $message = (empty($result)) ? 'Undefined Error' : $result['data'];
-                throw new ServiceException($message);
-            }
+            $payload['api_url'] = $api_url;
 
-            return $result;
+            $data_service = new DataService();
+            return $data_service->fetch(new DataDto(...$payload));
         }
         catch (Throwable $throwable){
             $status_code = (isset($throwable->error_code)) ? $throwable->error_code : 503;
@@ -45,14 +43,15 @@ class CrossService implements CrossContract
         }
     }
 
-    protected function _prepare(Request|CrossDto $payload):Request
+    protected function _prepare(Request|CrossDto $payload):array
     {
-        if($payload instanceof CrossDto){
-            $request = new Request();
-            $request->replace($payload->get());
-
-            return $request;
+        //傳入值為Request形態才需要做資料驗證
+        if($payload instanceof Request){
+            $payload = $this->_validate($payload);
+        }else{
+            $payload = $payload->get();
         }
+
         return $payload;
     }
 
