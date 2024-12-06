@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Jsadways\DataApi\Core\Service\Cross\Contracts\CrossContract;
 use Jsadways\DataApi\Services\SystemHost\SystemHostService;
+use Throwable;
 
 class CrossService implements CrossContract
 {
@@ -18,24 +19,30 @@ class CrossService implements CrossContract
     public function fetch(Request|CrossDto $payload): array
     {
         // TODO: Implement fetch() method.
+        try {
+            //準備以及驗證資料
+            $request = $this->_prepare($payload);
+            $payload = $this->_validate($request);
 
-        //準備以及驗證資料
-        $request = $this->_prepare($payload);
-        $payload = $this->_validate($request);
+            //取得全系統URL，比對系統API URL
+            $system_host = new SystemHostService();
+            $api_url = $system_host->list()->get_api_url($payload['system']);
 
-        //取得全系統URL，比對系統API URL
-        $system_host = new SystemHostService();
-        $api_url = $system_host->list()->get_api_url($payload['system']);
+            //取得資料
+            unset($payload['system']);
+            $result = Http::get($api_url, $payload)->json();
+            if (empty($result) || $result['status_code'] !== 200) {
+                $message = (empty($result)) ? 'Undefined Error' : $result['data'];
+                throw new ServiceException($message);
+            }
 
-        //取得資料
-        unset($payload['system']);
-        $result = Http::get($api_url,$payload)->json();
-        if(empty($result) || $result['status_code'] !== 200){
-            $message = (empty($result)) ? 'Undefined Error' : $result['data'];
-            throw new ServiceException($message);
+            return $result;
         }
-
-        return $result;
+        catch (Throwable $throwable){
+            $status_code = (isset($throwable->error_code)) ? $throwable->error_code : 503;
+            $content = $throwable->getMessage();
+            return ['status_code' => $status_code, 'data' => $content];
+        }
     }
 
     protected function _prepare(Request|CrossDto $payload):Request

@@ -15,13 +15,7 @@ class DataController
     use UseRepository;
     public function fetch(Request $request): array
     {
-        try {
-            return (new CrossService())->fetch($request);
-        }catch (Throwable $throwable){
-            $status_code = (isset($throwable->error_code)) ? $throwable->error_code : 503;
-            $content = $throwable->getMessage();
-            return ['status_code' => $status_code, 'data' => $content];
-        }
+        return (new CrossService())->fetch($request);
     }
 
     public function get(Request $request): array
