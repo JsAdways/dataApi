@@ -1,5 +1,5 @@
 ## Install
-composer require jsadways/dataapi
+composer require jsadways/data-api
 
 ## Edit .env file
 if you use the old repository version add this to .env file
