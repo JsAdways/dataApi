@@ -1,6 +1,6 @@
 <?php
 
-namespace Jsadways\DataApi\Core\Service\SystemHost\Contracts;
+namespace Jsadways\DataApi\Core\Services\SystemHost\Contracts;
 
 interface SystemHostContract
 {

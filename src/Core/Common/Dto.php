@@ -1,6 +1,6 @@
 <?php
 
-namespace Jsadways\DataApi\Services\Common;
+namespace Jsadways\DataApi\Core\Common;
 
 abstract class Dto
 {

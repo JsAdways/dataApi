@@ -1,14 +1,14 @@
 <?php
 
-namespace Jsadways\DataApi\Services\Data;
+namespace Jsadways\DataApi\Core\Services\Data\Dtos;
 
-use Jsadways\DataApi\Services\Common\Dto;
+use Jsadways\DataApi\Core\Common\Dto;
 
 final class DataDto extends Dto
 {
     public function __construct(
         public readonly string $api_url,
         public readonly string $repository,
-        public readonly string $condition,
+        public readonly ?array $condition = null,
     ) {}
 }

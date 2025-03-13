@@ -11,6 +11,9 @@
             "providers": [
                 "Jsadways\\DataApi\\Providers\\DataApiServiceProvider"
             ]
+        },
+        "aliases": {
+            "CrossData":  "Jsadways\\DataApi\\Facades\\CrossFacade"
         }
     },
     "authors": [

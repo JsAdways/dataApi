@@ -2,28 +2,37 @@
 
 namespace Jsadways\DataApi\Services\Data;
 
-use App\Exceptions\ServiceException;
 use Illuminate\Support\Facades\Http;
-use Jsadways\DataApi\Core\Service\Data\Contracts\DataContract;
+use Jsadways\DataApi\Core\Services\Data\Contracts\DataContract;
+use Illuminate\Support\Facades\Config;
+use Jsadways\DataApi\Core\Services\Data\Dtos\DataDto;
+use Exception;
 
 class DataService implements DataContract
 {
-
     /**
      * @throws ServiceException
      */
     public function fetch(DataDto $payload): array
     {
-        // TODO: Implement fetch() method.
-        $payload = $payload->get();
-        $api_url = $payload['api_url'];
-        unset($payload['system']);
-        $result = Http::get($api_url, $payload)->json();
-        if (empty($result) || (isset($result['status_code']) && $result['status_code'] !== 200)) {
-            $message = (empty($result)) ? 'Undefined Error' : $result['data'];
-            throw new ServiceException($message);
+        $condition = $payload->condition ?? json_encode([
+            'filter' => [],
+            'per_page' => 0,
+        ]);
+
+        $api_end_point = $payload->api_url.Config::get('data_api.get_api_url');
+
+        $response = Http::get($api_end_point, [
+            'repository' => $payload->repository,
+            'condition' => $condition 
+        ]);
+
+        $response_result = $response->json();
+        if ($response->failed()) {
+            $message = (empty($response_result)) ? 'Undefined Error' : $response_result['data'];
+            throw new Exception($message);
         }
 
-        return $result;
+        return $response_result['data'];
     }
 }

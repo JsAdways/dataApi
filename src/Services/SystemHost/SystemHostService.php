@@ -2,13 +2,12 @@
 
 namespace Jsadways\DataApi\Services\SystemHost;
 
-use App\Exceptions\ServiceException;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
-use Jsadways\DataApi\Core\Service\SystemHost\Contracts\SystemHostContract;
+use Jsadways\DataApi\Core\Services\SystemHost\Contracts\SystemHostContract;
 
 class SystemHostService implements SystemHostContract
 {
@@ -38,7 +37,7 @@ class SystemHostService implements SystemHostContract
             ];
             $result = Http::get($this->hr_host_url,$payload)->json();
             if(empty($result) || $result['status_code'] !== 200){
-                throw new ServiceException('HR host URL not found');
+                throw new Exception('HR host URL not found');
             }
 
             $this->system_list = Collect($result['data']);
@@ -60,10 +59,9 @@ class SystemHostService implements SystemHostContract
         })->first();
 
         if(empty($target_system)){
-            throw new ServiceException('Data Api URL not found');
+            throw new Exception('Data Api URL not found');
         }
 
-        $get_api_url = config::get('data_api.get_api_url');
-        return $target_system['host'].$get_api_url;
+        return $target_system['host'];
     }
 }

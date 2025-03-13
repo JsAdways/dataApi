@@ -2,67 +2,66 @@
 
 namespace Jsadways\DataApi\Services\Cross;
 
-use App\Exceptions\ServiceException;
-use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use Jsadways\DataApi\Core\Service\Cross\Contracts\CrossContract;
-use Jsadways\DataApi\Services\Data\DataDto;
 use Jsadways\DataApi\Services\Data\DataService;
 use Jsadways\DataApi\Services\SystemHost\SystemHostService;
-use Throwable;
+use Jsadways\DataApi\Core\Services\Cross\Contracts\CrossContract;
+use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDto;
+use Jsadways\DataApi\Core\Services\Data\Dtos\DataDto;
 
 class CrossService implements CrossContract
 {
+    protected CrossDto $payload;
+    protected string $system_host;
+
     /**
-     * @throws ServiceException
-     * @throws Exception
+     * 取得資料
+     *
+     * @param CrossDto $payload
+     * @return array
      */
-    public function fetch(Request|CrossDto $payload): array
+    public function fetch(CrossDto $payload): array
     {
-        // TODO: Implement fetch() method.
-        try {
-            //準備以及驗證資料
-            $payload = $this->_prepare($payload);
-
-            //取得全系統URL，比對系統API URL
-            $system_host = new SystemHostService();
-            $api_url = $system_host->list()->get_api_url($payload['system']);
-
-            //取得資料
-            unset($payload['system']);
-            $payload['api_url'] = $api_url;
-
-            $data_service = new DataService();
-            return $data_service->fetch(new DataDto(...$payload));
-        }
-        catch (Throwable $throwable){
-            $status_code = (isset($throwable->error_code)) ? $throwable->error_code : 503;
-            $content = $throwable->getMessage();
-            return ['status_code' => $status_code, 'data' => $content];
-        }
+        return $this->set_payload($payload)
+        ->fetch_system_host()
+        ->fetch_system_data();
     }
 
-    protected function _prepare(Request|CrossDto $payload):array
-    {
-        //傳入值為Request形態才需要做資料驗證
-        if($payload instanceof Request){
-            $payload = $this->_validate($payload);
-        }else{
-            $payload = $payload->get();
-        }
+    /**
+     * 初始化 payload 資料
+     *
+     * @param CrossDto $payload
+     * @return static
+     */
+    protected function set_payload(CrossDto $payload): static
+    { 
+        $this->payload = $payload;
 
-        return $payload;
+        return $this;
     }
 
-    protected function _validate(Request $request): array
+    /**
+     * 取得目標系統網址
+     *
+     * @return static
+     */
+    protected function fetch_system_host(): static
     {
-        return $request->validate(
-            [
-                'system' => 'string|required',
-                'repository' => 'string|required',
-                'condition' => 'json|required',
-            ]
-        );
+        $this->system_host = (new SystemHostService())->list()->get_api_url($this->payload->system);
+
+        return $this;
+    }
+
+    /**
+     * 取得目標系統資料
+     *
+     * @return array
+     */
+    protected function fetch_system_data(): array
+    {
+        return (new DataService())->fetch(new DataDto(
+            api_url: $this->system_host,
+            repository: $this->payload->repository,
+            condition: $this->payload->condition
+        ));
     }
 }
