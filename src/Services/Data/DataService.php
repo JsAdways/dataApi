@@ -15,16 +15,16 @@ class DataService implements DataContract
      */
     public function fetch(DataDto $payload): array
     {
-        $condition = $payload->condition ?? json_encode([
+        $condition = $payload->condition ?? [
             'filter' => [],
             'per_page' => 0,
-        ]);
+        ];
 
         $api_end_point = $payload->api_url.Config::get('data_api.get_api_url');
 
         $response = Http::get($api_end_point, [
             'repository' => $payload->repository,
-            'condition' => $condition 
+            'condition' => json_encode($condition)
         ]);
 
         $response_result = $response->json();
