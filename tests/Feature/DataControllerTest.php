@@ -18,7 +18,10 @@ class DataControllerTest extends TestCase
         $payload = [
             'system' => '財務系統',
             'repository' => 'SettingReceiptDollarType',
-            'condition' => '{"filter":{"status_eq":1},"per_page":"0"}'
+            'condition' => [
+                "filter" => "{\"status_eq\":1,\"per_page\":0}",
+                "per_page" => 0
+            ]
         ];
         $response = $this->withoutMiddleware()->post(self::API.'/fetch', $payload);
 

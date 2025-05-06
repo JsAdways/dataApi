@@ -2,7 +2,7 @@
 
 namespace Jsadways\DataApi\Controllers;
 
-use Jsadways\DataApi\Core\Repository\ReadListParamsDto;
+use Jsadways\LaravelSDK\Core\ReadListParamsDto;
 use Jsadways\DataApi\Traits\UseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
