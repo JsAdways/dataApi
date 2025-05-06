@@ -25,7 +25,7 @@ class DataController
                 'system' => 'required|string',
                 'repository' => 'required|string',
                 'condition' => 'nullable|array',
-                'condition.filter' => 'nullable|json',
+                'condition.filter' => 'nullable|array',
                 'condition.sort_by' => 'nullable|string|',
                 'condition.sort_order' => 'nullable|string|in:asc,desc',
                 'condition.per_page' => 'nullable|integer',
