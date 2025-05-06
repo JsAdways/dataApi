@@ -7,7 +7,7 @@ use Jsadways\DataApi\Traits\UseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Jsadways\DataApi\Services\Cross\CrossService;
-use App\Repositories\RepositoryManager;
+use Jsadways\DataApi\Repositories\RepositoryManager;
 use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDto;
 
 class DataController
