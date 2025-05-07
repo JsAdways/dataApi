@@ -118,7 +118,7 @@ where id_number column equals to '27743336'
 - use service
 
 ```
-use Jsadways\DataApi\Services\Cross\CrossDto;
+use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDto;
 use Jsadways\DataApi\Services\Cross\CrossService;
 
 $payload = [
@@ -132,13 +132,13 @@ $result = (new CrossService())->fetch(new CrossDto(...$payload));
 - use static method
 
 ```
-use Jsadways\DataApi\Services\Cross\CrossDto;
-use Jsadways\DataApi\Facades\CrossServer;
+use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDto;
+use Jsadways\DataApi\Facades\CrossFacade;
 
 $payload = [
         'system' => 'crm',
         'repository' => 'customer',
         'condition' => '{"filter":{"id_number_eq":"27743336"},"per_page":"0"}'
 ];
-$result = CrossServer::fetch(new CrossDto(...$payload));
+$result = CrossFacade::fetch(new CrossDto(...$payload));
 ```
