@@ -2,12 +2,12 @@
 
 namespace Jsadways\DataApi\Controllers;
 
-use App\Core\Repository\ReadListParamsDto;
+use Jsadways\LaravelSDK\Core\ReadListParamsDto;
 use Jsadways\DataApi\Traits\UseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Jsadways\DataApi\Services\Cross\CrossService;
-use App\Repositories\RepositoryManager;
+use Jsadways\DataApi\Repositories\RepositoryManager;
 use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDto;
 
 class DataController
@@ -25,7 +25,7 @@ class DataController
                 'system' => 'required|string',
                 'repository' => 'required|string',
                 'condition' => 'nullable|array',
-                'condition.filter' => 'nullable|json',
+                'condition.filter' => 'nullable|array',
                 'condition.sort_by' => 'nullable|string|',
                 'condition.sort_order' => 'nullable|string|in:asc,desc',
                 'condition.per_page' => 'nullable|integer',

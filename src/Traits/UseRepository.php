@@ -2,8 +2,7 @@
 
 namespace Jsadways\DataApi\Traits;
 
-use App\Core\Manager\GetObjectDto;
-use App\Managers\RepositoryManager;
+use Jsadways\DataApi\Repositories\RepositoryManager;
 use Exception;
 
 trait UseRepository
@@ -18,6 +17,6 @@ trait UseRepository
     protected function repository(string $name): object
     {
         $repository_manager = new RepositoryManager();
-        return $repository_manager->get(new GetObjectDto($name));
+        return $repository_manager->get($name);
     }
 }

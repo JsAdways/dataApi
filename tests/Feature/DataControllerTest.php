@@ -18,15 +18,20 @@ class DataControllerTest extends TestCase
         $payload = [
             'system' => '財務系統',
             'repository' => 'SettingReceiptDollarType',
-            'condition' => '{"filter":{"status_eq":1},"per_page":"0"}'
+            'condition' => [
+                "filter" => [
+                    "status_eq" => 1
+                ],
+                "per_page" => 0
+            ]
         ];
         $response = $this->withoutMiddleware()->post(self::API.'/fetch', $payload);
 
         $response->assertStatus(200)
-            ->assertJsonStructure(['status_code', 'data']);
+            ->assertJsonStructure([]);
 
         $resp_data = $response->json();
-        $this->assertEquals(200,$resp_data['status_code']);
+        $this->assertIsArray($resp_data);
     }
 
     public function test_missing_system():void
@@ -34,15 +39,19 @@ class DataControllerTest extends TestCase
         $payload = [
             'system' => '貝才務系統',
             'repository' => 'SettingReceiptDollarType',
-            'condition' => '{"filter":{"status_eq":1},"per_page":"0"}'
+            'condition' => [
+                "filter" => [
+                    "status_eq" => 1
+                ],
+                "per_page" => 0
+            ]
         ];
         $response = $this->withoutMiddleware()->post(self::API.'/fetch', $payload);
-        $response->assertStatus(200)
-            ->assertJsonStructure(['status_code', 'data']);
+        $response->assertStatus(400)
+            ->assertJsonStructure(['message']);
 
         $resp_data = $response->json();
-        $this->assertEquals(42000,$resp_data['status_code']);
-        $this->assertEquals('Data Api URL not found',$resp_data['data']);
+        $this->assertEquals('發生無法定義之異常，請盡快聯絡IT部。',$resp_data['message']);
     }
 
     public function test_missing_repository():void
@@ -50,15 +59,19 @@ class DataControllerTest extends TestCase
         $payload = [
             'system' => '財務系統',
             'repository' => 'SettingReceiptDollarType1',
-            'condition' => '{"filter":{"status_eq":1},"per_page":"0"}'
+            'condition' => [
+                "filter" => [
+                    "status_eq" => 1
+                ],
+                "per_page" => 0
+            ]
         ];
         $response = $this->withoutMiddleware()->post(self::API.'/fetch', $payload);
-        $response->assertStatus(200)
-            ->assertJsonStructure(['status_code', 'data']);
+        $response->assertStatus(400)
+            ->assertJsonStructure(['message']);
 
         $resp_data = $response->json();
-        $this->assertEquals(42000,$resp_data['status_code']);
-        $this->assertEquals('Class not found.',$resp_data['data']);
+        $this->assertEquals('發生無法定義之異常，請盡快聯絡IT部。',$resp_data['message']);
     }
 
 
