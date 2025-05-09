@@ -11,7 +11,7 @@ use Exception;
 class DataService implements DataContract
 {
     /**
-     * @throws ServiceException
+     * @throws Exception
      */
     public function fetch(DataDto $payload): array
     {
@@ -29,7 +29,7 @@ class DataService implements DataContract
 
         $response_result = $response->json();
         if ($response->failed()) {
-            $message = (empty($response_result)) ? 'Undefined Error' : $response_result['data'];
+            $message = (empty($response_result)) ? 'Undefined Error' : $response_result['message'];
             throw new Exception($message);
         }
 
