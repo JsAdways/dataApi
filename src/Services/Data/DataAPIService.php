@@ -8,22 +8,27 @@ use Illuminate\Support\Facades\Config;
 use Jsadways\DataApi\Core\Services\Data\Dtos\DataDto;
 use Exception;
 
-class DataService implements DataContract
+class DataAPIService implements DataContract
 {
+    public function __construct(
+        protected DataDto $_payload
+    )
+    {
+    }
     /**
      * @throws Exception
      */
-    public function fetch(DataDto $payload): array
+    public function fetch(): array
     {
-        $condition = $payload->condition ?? [
+        $condition = $this->_payload->condition ?? [
             'filter' => [],
             'per_page' => 0,
         ];
 
-        $api_end_point = $payload->api_url.Config::get('data_api.get_api_url');
+        $api_end_point = $this->_payload->api_url.Config::get('data_api.get_api_url');
 
         $response = Http::get($api_end_point, [
-            'repository' => $payload->repository,
+            'repository' => $this->_payload->repository,
             'condition' => json_encode($condition)
         ]);
 

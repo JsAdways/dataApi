@@ -2,6 +2,7 @@
 
 namespace Jsadways\DataApi\Controllers;
 
+use Exception;
 use Jsadways\LaravelSDK\Core\ReadListParamsDto;
 use Jsadways\DataApi\Traits\UseRepository;
 use Illuminate\Http\Request;
@@ -18,6 +19,9 @@ class DataController
         protected CrossService $CrossService
     ) {}
 
+    /**
+     * @throws Exception
+     */
     public function fetch(Request $request): array
     {
         $payload = $request->validate(
@@ -36,6 +40,9 @@ class DataController
         return $this->CrossService->fetch(new CrossDto(...$payload));
     }
 
+    /**
+     * @throws Exception
+     */
     public function get(Request $request): array
     {
         $payload = $request->validate(
@@ -60,5 +67,20 @@ class DataController
         }
 
         return ['data' => $data];
+    }
+
+    public function service(Request $request): array
+    {
+        $payload = $request->validate(
+            [
+                'system' => 'required|string',
+                'api' => 'required|string',
+                'payload' => 'nullable|array'
+            ]
+        );
+
+
+
+        return [];
     }
 }

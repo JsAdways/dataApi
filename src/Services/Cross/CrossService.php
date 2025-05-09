@@ -3,7 +3,8 @@
 namespace Jsadways\DataApi\Services\Cross;
 
 use Exception;
-use Jsadways\DataApi\Services\Data\DataService;
+use Jsadways\DataApi\Core\Services\Data\Contracts\DataContract;
+use Jsadways\DataApi\Services\Data\DataAPIService;
 use Jsadways\DataApi\Services\SystemHost\SystemHostService;
 use Jsadways\DataApi\Core\Services\Cross\Contracts\CrossContract;
 use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDto;
@@ -13,6 +14,7 @@ class CrossService implements CrossContract
 {
     protected CrossDto $payload;
     protected string $system_host;
+    protected DataContract $dataService;
 
     /**
      * 取得資料
@@ -24,8 +26,9 @@ class CrossService implements CrossContract
     public function fetch(CrossDto $payload): array
     {
         return $this->_set_payload($payload)
-        ->_fetch_system_host()
-        ->_fetch_system_data();
+            ->_fetch_system_host()
+            ->_prepare_data_api_Service()
+            ->_send();
     }
 
     /**
@@ -54,18 +57,24 @@ class CrossService implements CrossContract
         return $this;
     }
 
-    /**
-     * 取得目標系統資料
-     *
-     * @return array
-     * @throws Exception
-     */
-    protected function _fetch_system_data(): array
+    protected function _prepare_data_api_Service(): static
     {
-        return (new DataService())->fetch(new DataDto(
+        $this->dataService =  new DataAPIService(new DataDto(
             api_url: $this->system_host,
             repository: $this->payload->repository,
             condition: $this->payload->condition
         ));
+
+        return $this;
+    }
+
+    /**
+     * 取得目標系統資料
+     *
+     * @return array
+     */
+    protected function _send(): array
+    {
+        return $this->dataService->fetch();
     }
 }
