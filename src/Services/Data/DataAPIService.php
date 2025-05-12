@@ -5,13 +5,13 @@ namespace Jsadways\DataApi\Services\Data;
 use Illuminate\Support\Facades\Http;
 use Jsadways\DataApi\Core\Services\Data\Contracts\DataContract;
 use Illuminate\Support\Facades\Config;
-use Jsadways\DataApi\Core\Services\Data\Dtos\DataDto;
+use Jsadways\DataApi\Core\Services\Data\Dtos\DataApiDto;
 use Exception;
 
 class DataAPIService implements DataContract
 {
     public function __construct(
-        protected DataDto $_payload
+        protected DataApiDto $_payload
     )
     {
     }

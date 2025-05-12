@@ -3,11 +3,11 @@
 namespace Jsadways\DataApi\Tests\Unit\DataTest;
 
 use Exception;
-use Jsadways\DataApi\Core\Services\Data\Dtos\DataDto;
+use Jsadways\DataApi\Core\Services\Data\Dtos\DataApiDto;
 use Jsadways\DataApi\Services\Data\DataAPIService;
 use Tests\TestCase;
 
-class DataTest extends TestCase
+class DataAPIServiceTest extends TestCase
 {
     /**
      * @throws Exception
@@ -25,7 +25,7 @@ class DataTest extends TestCase
             ]
         ];
 
-        $data_service = new DataAPIService(new DataDto(...$payload));
+        $data_service = new DataAPIService(new DataApiDto(...$payload));
         $result = $data_service->fetch();
         $this->assertIsArray($result);
     }
@@ -45,7 +45,7 @@ class DataTest extends TestCase
 
         $this->assertThrows(
             function () use ($payload) {
-                (new DataAPIService(new DataDto(...$payload)))->fetch();
+                (new DataAPIService(new DataApiDto(...$payload)))->fetch();
             },
             Exception::class,
             "發生無法定義之異常，請盡快聯絡IT部。"

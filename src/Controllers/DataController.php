@@ -3,13 +3,15 @@
 namespace Jsadways\DataApi\Controllers;
 
 use Exception;
+use Jsadways\DataApi\Facades\CrossFacade;
 use Jsadways\LaravelSDK\Core\ReadListParamsDto;
 use Jsadways\DataApi\Traits\UseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Jsadways\DataApi\Services\Cross\CrossService;
 use Jsadways\DataApi\Repositories\RepositoryManager;
-use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDto;
+use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDataDto;
+use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossServiceDto;
 
 class DataController
 {
@@ -37,7 +39,7 @@ class DataController
             ]
         );
 
-        return $this->CrossService->fetch(new CrossDto(...$payload));
+        return $this->CrossService->fetch(new CrossDataDto(...$payload));
     }
 
     /**
@@ -69,18 +71,20 @@ class DataController
         return ['data' => $data];
     }
 
+    /**
+     * @throws Exception
+     */
     public function service(Request $request): array
     {
         $payload = $request->validate(
             [
                 'system' => 'required|string',
                 'api' => 'required|string',
+                'token' => 'required|string',
                 'payload' => 'nullable|array'
             ]
         );
 
-
-
-        return [];
+        return $this->CrossService->service(new CrossServiceDto(...$payload));
     }
 }

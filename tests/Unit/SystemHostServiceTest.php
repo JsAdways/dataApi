@@ -6,7 +6,7 @@ use Exception;
 use Jsadways\DataApi\Services\SystemHost\SystemHostService;
 use Tests\TestCase;
 
-class SystemHostTest extends TestCase
+class SystemHostServiceTest extends TestCase
 {
     /**
      * @throws Exception

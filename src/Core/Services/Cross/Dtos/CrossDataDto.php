@@ -1,13 +1,13 @@
 <?php
 
-namespace Jsadways\DataApi\Core\Services\Data\Dtos;
+namespace Jsadways\DataApi\Core\Services\Cross\Dtos;
 
 use Jsadways\DataApi\Core\Common\Dto;
 
-final class DataDto extends Dto
+final class CrossDataDto extends Dto
 {
     public function __construct(
-        public readonly string $api_url,
+        public readonly string $system,
         public readonly string $repository,
         public readonly ?array $condition = null,
     ) {}

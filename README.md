@@ -24,7 +24,6 @@ REPOSITORY_VERSION=0
 `response`
 ```
 {
-    status_code : 'integer, 200 for success, others for fail',
     data : 'json, the data you filter out from other system'
 }
 ```
@@ -48,8 +47,28 @@ REPOSITORY_VERSION=0
 `response`
 ```
 {
-    status_code : 'integer, 200 for success, others for fail',
     data : 'json, the data you filter out from other system'
+}
+```
+
+3. Used in other system backend, for call the service api
+
+`POST` `/api/data_api/service`
+
+`parameters`
+```
+{
+    system : 'string, the system name you want to get data, which defined in HR system',
+    api : 'string, the api path you want to call defined in an other system, ec: verify_copany',
+    token: 'string, Bearer token to verify your permission',
+    payload: 'Object, the payload api need'
+}
+```
+
+`response`
+```
+{
+    data : 'json, the api response'
 }
 ```
 
@@ -118,7 +137,7 @@ where id_number column equals to '27743336'
 - use service
 
 ```
-use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDto;
+use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDataDto;
 use Jsadways\DataApi\Services\Cross\CrossService;
 
 $payload = [
@@ -126,13 +145,13 @@ $payload = [
         'repository' => 'customer',
         'condition' => '{"filter":{"id_number_eq":"27743336"},"per_page":"0"}'
 ];
-$result = (new CrossService())->fetch(new CrossDto(...$payload));
+$result = (new CrossService())->fetch(new CrossDataDto(...$payload));
 ```
 
 - use static method
 
 ```
-use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDto;
+use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDataDto;
 use Jsadways\DataApi\Facades\CrossFacade;
 
 $payload = [
@@ -140,5 +159,44 @@ $payload = [
         'repository' => 'customer',
         'condition' => '{"filter":{"id_number_eq":"27743336"},"per_page":"0"}'
 ];
-$result = CrossFacade::fetch(new CrossDto(...$payload));
+$result = CrossFacade::fetch(new CrossDataDto(...$payload));
+```
+
+3. Call Service API
+
+`code`
+- use service
+
+```
+use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossServiceDto;
+use Jsadways\DataApi\Services\Cross\CrossService;
+
+$payload = [
+        'system' => 'crm',
+        'token' => 'Bearer XXXXXXXXXXXXXX',
+        'api => 'verify_company
+        'payload' => [
+             'id_number' => '27743336',
+             'name' => '傑思愛德威媒體股份有限公司'
+        ]
+];
+$result = (new CrossService())->fetch(new CrossServiceDto(...$payload));
+```
+
+- use static method
+
+```
+use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossServiceDto;
+use Jsadways\DataApi\Facades\CrossFacade;
+
+$payload = [
+        'system' => 'crm',
+        'token' => 'Bearer XXXXXXXXXXXXXX',
+        'api => 'verify_company
+        'payload' => [
+             'id_number' => '27743336',
+             'name' => '傑思愛德威媒體股份有限公司'
+        ]
+];
+$result = CrossFacade::fetch(new CrossServiceDto(...$payload));
 ```
