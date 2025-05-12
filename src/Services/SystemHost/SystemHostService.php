@@ -32,11 +32,11 @@ class SystemHostService implements SystemHostContract
             $this->system_list = Cache::get('data_api_system_list');
         }else{
             $payload = [
-                'repository' => 'SystemRepository',
+                'repository' => 'System',
                 'condition' => json_encode(['filter'=>[],'pre_page'=>0])
             ];
             $result = Http::get($this->hr_host_url,$payload)->json();
-            if(empty($result) || $result['status_code'] !== 200){
+            if(empty($result)){
                 throw new Exception('HR host URL not found');
             }
 
