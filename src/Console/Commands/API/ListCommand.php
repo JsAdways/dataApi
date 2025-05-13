@@ -21,7 +21,7 @@ class ListCommand extends Command
         $system_list = (new SystemHostService())->list()->all();
 
         foreach($system_list as $system){
-            $result = Http::post($system['host'].'/command/service_list');
+            $result = Http::post($system['host'].'/api/data_api/command/service_list');
             if($result->successful()){
                 $this->_outputTable([$system['name']],[]);
                 $this->_refactor_data($result->json()['data']);
