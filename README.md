@@ -72,6 +72,25 @@ REPOSITORY_VERSION=0
 }
 ```
 
+4. Use Command to list all system service api
+
+`php artisan data-api:list`
+
+`response`
+```
++-------------+
+| system name |
++-------------+
++--------+--------------------------------+------------+---------+--------+----------+----------------+
+| Method | URI                            | Parameters |         |        |          |                |
++--------+--------------------------------+------------+---------+--------+----------+----------------+
+| POST   | the api url                    |            | Name    | Type   | Required | Description    |
+|        |                                | 0          |         |        |          |                |
+|        |                                | 1          |         |        |          |                |
++--------+--------------------------------+------------+---------+--------+----------+----------------+
+
+```
+
 ## Examples
 1. Call route url post from frontend
 
@@ -183,20 +202,27 @@ $payload = [
 $result = (new CrossService())->fetch(new CrossServiceDto(...$payload));
 ```
 
-- use static method
+4. Use Command to list all system service api
+
+`code`
+- php artisan
 
 ```
-use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossServiceDto;
-use Jsadways\DataApi\Facades\CrossFacade;
+php artisan data-api:list
+```
 
-$payload = [
-        'system' => 'crm',
-        'token' => 'Bearer XXXXXXXXXXXXXX',
-        'api => 'company_verify'
-        'payload' => [
-             'id_number' => '27743336',
-             'name' => '傑思愛德威媒體股份有限公司'
-        ]
-];
-$result = CrossFacade::fetch(new CrossServiceDto(...$payload));
+- response
+
+```
++-----+
+| CRM |
++-----+
++--------+--------------------------------+------------+---------+--------+----------+--------------------------------------------------------------------------+
+| Method | URI                            | Parameters |         |        |          |                                                                          |
++--------+--------------------------------+------------+---------+--------+----------+--------------------------------------------------------------------------+
+| POST   | api/service_api/company_verify |            | Name    | Type   | Required | Description                                                              |
+|        |                                | 0          | title   | string | 1        | 標題                                                                      |
+|        |                                | 1          | content | string | 1        | 內容文字內容文字內容文字內容文字內容文字內容文字                                 |
++--------+--------------------------------+------------+---------+--------+----------+--------------------------------------------------------------------------+
+
 ```
