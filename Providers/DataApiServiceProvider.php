@@ -13,9 +13,9 @@ class DataApiServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $configPath = __DIR__ . '/../../config/data_api.php';
+        $configPath = __DIR__ . '/../config/data_api.php';
         $this->mergeConfigFrom($configPath, 'data_api');
-    
+
         $this->app->singleton(CrossContract::class, CrossService::class);
     }
 
@@ -24,11 +24,11 @@ class DataApiServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $source = realpath($raw = __DIR__.'/../../config/data_api.php') ?: $raw;
+        $source = realpath($raw = __DIR__.'/../config/data_api.php') ?: $raw;
         $this->publishes([
             $source => config_path('data_api.php'),
         ]);
 
-        $this->loadRoutesFrom(__DIR__.'/../../routes/api.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
     }
 }

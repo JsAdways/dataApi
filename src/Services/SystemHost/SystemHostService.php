@@ -64,4 +64,9 @@ class SystemHostService implements SystemHostContract
 
         return $target_system['host'];
     }
+
+    public function all(): array
+    {
+        return $this->system_list->toArray();
+    }
 }

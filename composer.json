@@ -1,15 +1,18 @@
 {
     "name": "jsadways/data-api",
     "type": "library",
+    "version": "1.0.12",
     "autoload": {
         "psr-4": {
-            "Jsadways\\DataApi\\": "src/"
+            "Jsadways\\DataApi\\": "src/",
+            "Jsadways\\DataApi\\Providers\\": "Providers/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Jsadways\\DataApi\\Providers\\DataApiServiceProvider"
+                "Jsadways\\DataApi\\Providers\\DataApiServiceProvider",
+                "Jsadways\\DataApi\\Providers\\CommandServiceProvider"
             ]
         },
         "aliases": {

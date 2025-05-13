@@ -2,10 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use Jsadways\DataApi\Controllers\DataController;
+use Jsadways\DataApi\Controllers\CommandController;
 
 Route::group(['prefix' => 'api/data_api'], function () {
+    //for data api
     Route::post('/fetch', [DataController::class, 'fetch']);
     Route::get('/get', [DataController::class, 'get']);
     //for service api
     Route::post('/service', [DataController::class, 'service']);
+    //for command api
+    Route::post('/command/service_list', [CommandController::class, 'service_list']);
 });

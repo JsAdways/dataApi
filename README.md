@@ -174,7 +174,7 @@ use Jsadways\DataApi\Services\Cross\CrossService;
 $payload = [
         'system' => 'crm',
         'token' => 'Bearer XXXXXXXXXXXXXX',
-        'api => 'verify_company
+        'api => 'company_verify'
         'payload' => [
              'id_number' => '27743336',
              'name' => '傑思愛德威媒體股份有限公司'
@@ -192,7 +192,7 @@ use Jsadways\DataApi\Facades\CrossFacade;
 $payload = [
         'system' => 'crm',
         'token' => 'Bearer XXXXXXXXXXXXXX',
-        'api => 'verify_company
+        'api => 'company_verify'
         'payload' => [
              'id_number' => '27743336',
              'name' => '傑思愛德威媒體股份有限公司'
