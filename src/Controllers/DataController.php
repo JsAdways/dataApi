@@ -5,6 +5,7 @@ namespace Jsadways\DataApi\Controllers;
 use Exception;
 use Jsadways\DataApi\Facades\CrossFacade;
 use Jsadways\LaravelSDK\Core\ReadListParamsDto;
+use App\Core\Repository\ReadListParamsDto as ReadListParamsDtoOLD;
 use Jsadways\DataApi\Traits\UseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -62,8 +63,7 @@ class DataController
 
         $repository_version = intval(config::get('data_api.repository_version'));
         if($repository_version === 0){
-            $repository_manager = new RepositoryManager();
-            $data = $repository_manager->get($payload['repository'])->read_list(json_decode($payload['condition'],true))->toArray()['data'];
+            $data = $this->repository($payload['repository'])->read_models(new ReadListParamsDtoOLD(...$condition));
         }else{
             $data = $this->repository($payload['repository'])->read_models(new ReadListParamsDto(...$condition));
         }

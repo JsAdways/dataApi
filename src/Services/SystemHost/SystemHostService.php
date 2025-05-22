@@ -33,7 +33,7 @@ class SystemHostService implements SystemHostContract
         }else{
             $payload = [
                 'repository' => 'System',
-                'condition' => json_encode(['filter'=>[],'pre_page'=>0])
+                'condition' => json_encode(['filter'=>[],'per_page'=>0])
             ];
             $result = Http::get($this->hr_host_url,$payload)->json();
             if(empty($result)){
