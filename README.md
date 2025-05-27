@@ -199,7 +199,7 @@ $payload = [
              'name' => '傑思愛德威媒體股份有限公司'
         ]
 ];
-$result = (new CrossService())->fetch(new CrossServiceDto(...$payload));
+$result = (new CrossService())->service(new CrossServiceDto(...$payload));
 ```
 
 4. Use Command to list all system service api
