@@ -1,12 +1,12 @@
 <?php
 
-namespace Jsadways\DataApi\Services\Data;
+namespace Jsadways\DataApi\Services\Cross\DataStream\API;
 
+use Exception;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Jsadways\DataApi\Core\Services\Data\Contracts\DataContract;
-use Illuminate\Support\Facades\Config;
 use Jsadways\DataApi\Core\Services\Data\Dtos\DataApiDto;
-use Exception;
 
 class DataAPIService implements DataContract
 {
@@ -25,7 +25,7 @@ class DataAPIService implements DataContract
             'per_page' => 0,
         ];
 
-        $api_end_point = $this->_payload->api_url.Config::get('data_api.get_api_url');
+        $api_end_point = $this->_payload->system_host.Config::get('data_api.get_api_url');
 
         $response = Http::get($api_end_point, [
             'repository' => $this->_payload->repository,

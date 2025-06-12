@@ -4,6 +4,7 @@ namespace Jsadways\DataApi\Tests\Unit\CrossTest;
 
 use Exception;
 use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDataDto;
+use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossProcessDto;
 use Jsadways\DataApi\Services\Cross\CrossService;
 use Tests\TestCase;
 
@@ -12,7 +13,7 @@ class CrossServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    public function test_happy_path_fetch():void
+    public function test_happy_path_fetch_data():void
     {
         $payload = [
             'system' => '財務系統',
@@ -29,6 +30,26 @@ class CrossServiceTest extends TestCase
 
         $this->assertIsArray($result);
     }
+
+    /**
+     * @throws Exception
+     */
+//    public function test_happy_path_fetch_process():void
+//    {
+//        $payload = [
+//            'system' => 'CRM',
+//            'api' => 'company_verify',
+//            'token' => 'token',
+//            'payload' => [
+//                'id_number' => '27743336',
+//                'name' => '傑思愛德威媒體股份有限公司'
+//            ]
+//        ];
+//
+//        $result = (new CrossService())->fetch(new CrossProcessDto(...$payload));
+//
+//        $this->assertIsArray($result);
+//    }
 
     public function test_missing_system_fetch()
     {

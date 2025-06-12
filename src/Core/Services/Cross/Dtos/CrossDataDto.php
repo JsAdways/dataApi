@@ -2,9 +2,9 @@
 
 namespace Jsadways\DataApi\Core\Services\Cross\Dtos;
 
-use Jsadways\DataApi\Core\Common\Dto;
+use Jsadways\DataApi\Core\Common\PayloadDto;
 
-final class CrossDataDto extends Dto
+final class CrossDataDto extends PayloadDto
 {
     public function __construct(
         public readonly string $system,

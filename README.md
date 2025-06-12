@@ -51,9 +51,9 @@ REPOSITORY_VERSION=0
 }
 ```
 
-3. Used in other system backend, for call the service api
+3. Used in other system backend, for call the process api
 
-`POST` `/api/data_api/service`
+`POST` `/api/data_api/process`
 
 `parameters`
 ```
@@ -72,7 +72,7 @@ REPOSITORY_VERSION=0
 }
 ```
 
-4. Use Command to list all system service api
+4. Use Command to list all system process api
 
 `php artisan data-api:list`
 
@@ -181,13 +181,13 @@ $payload = [
 $result = CrossFacade::fetch(new CrossDataDto(...$payload));
 ```
 
-3. Call Service API
+3. Call Process API
 
 `code`
 - use service
 
 ```
-use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossServiceDto;
+use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossProcessDto;
 use Jsadways\DataApi\Services\Cross\CrossService;
 
 $payload = [
@@ -199,7 +199,7 @@ $payload = [
              'name' => '傑思愛德威媒體股份有限公司'
         ]
 ];
-$result = (new CrossService())->service(new CrossServiceDto(...$payload));
+$result = (new CrossService())->fetch(new CrossProcessDto(...$payload));
 ```
 
 4. Use Command to list all system service api
@@ -220,7 +220,7 @@ php artisan data-api:list
 +--------+--------------------------------+------------+---------+--------+----------+--------------------------------------------------------------------------+
 | Method | URI                            | Parameters |         |        |          |                                                                          |
 +--------+--------------------------------+------------+---------+--------+----------+--------------------------------------------------------------------------+
-| POST   | api/service_api/company_verify |            | Name    | Type   | Required | Description                                                              |
+| POST   | api/process_api/company_verify |            | Name    | Type   | Required | Description                                                              |
 |        |                                | 0          | title   | string | 1        | 標題                                                                      |
 |        |                                | 1          | content | string | 1        | 內容文字內容文字內容文字內容文字內容文字內容文字                                 |
 +--------+--------------------------------+------------+---------+--------+----------+--------------------------------------------------------------------------+

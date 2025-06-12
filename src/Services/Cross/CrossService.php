@@ -3,56 +3,46 @@
 namespace Jsadways\DataApi\Services\Cross;
 
 use Exception;
-use Jsadways\DataApi\Core\Services\Data\Contracts\DataContract;
-use Jsadways\DataApi\Core\Services\Data\Dtos\ServiceApiDto;
-use Jsadways\DataApi\Services\Data\DataAPIService;
-use Jsadways\DataApi\Services\Data\ServiceAPIService;
-use Jsadways\DataApi\Services\SystemHost\SystemHostService;
+use Jsadways\DataApi\Core\Common\PayloadDto;
 use Jsadways\DataApi\Core\Services\Cross\Contracts\CrossContract;
-use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDataDto;
-use Jsadways\DataApi\Core\Services\Data\Dtos\DataApiDto;
-use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossServiceDto;
+use Jsadways\DataApi\Core\Services\Data\Contracts\DataContract;
+use Jsadways\DataApi\Services\Cross\DataStream\DataStreamManager;
+use Jsadways\DataApi\Services\SystemHost\SystemHostService;
+use ReflectionException;
 
 class CrossService implements CrossContract
 {
-    protected CrossDataDto| CrossServiceDto $payload;
+    protected PayloadDto $payload;
     protected string $system_host;
     protected DataContract $dataService;
+    protected DataStreamManager $dataStreamManager;
+
+    public function __construct(){
+        $this->dataStreamManager = new DataStreamManager();
+    }
 
     /**
      * 取得資料
      *
-     * @param CrossDataDto $payload
+     * @param PayloadDto $payload
      * @return array
      * @throws Exception
      */
-    public function fetch(CrossDataDto $payload): array
+    public function fetch(PayloadDto $payload): array
     {
         return $this->_set_payload($payload)
             ->_fetch_system_host()
-            ->_prepare_data_api_Service()
-            ->_send();
-    }
-
-    /**
-     * 呼叫service api
-     * @throws Exception
-     */
-    public function service(CrossServiceDto $payload): array
-    {
-        return $this->_set_payload($payload)
-            ->_fetch_system_host()
-            ->_prepare_service_api_Service()
+            ->_prepare_data_stream()
             ->_send();
     }
 
     /**
      * 初始化 payload 資料
      *
-     * @param CrossDataDto|CrossServiceDto $payload
+     * @param PayloadDto $payload
      * @return static
      */
-    protected function _set_payload(CrossDataDto | CrossServiceDto $payload): static
+    protected function _set_payload(PayloadDto $payload): static
     {
         $this->payload = $payload;
 
@@ -72,24 +62,12 @@ class CrossService implements CrossContract
         return $this;
     }
 
-    protected function _prepare_data_api_Service(): static
+    /**
+     * @throws ReflectionException
+     */
+    protected function _prepare_data_stream(): static
     {
-        $this->dataService =  new DataAPIService(new DataApiDto(
-            api_url: $this->system_host,
-            repository: $this->payload->repository,
-            condition: $this->payload->condition
-        ));
-
-        return $this;
-    }
-
-    protected function _prepare_service_api_Service(): static
-    {
-        $this->dataService =  new ServiceAPIService(new ServiceApiDto(
-            api_url: $this->system_host.'/api/service_api/'.$this->payload->api,
-            token: $this->payload->token,
-            payload: $this->payload->payload
-        ));
+        $this->dataService = $this->dataStreamManager->get($this->system_host,$this->payload);
 
         return $this;
     }

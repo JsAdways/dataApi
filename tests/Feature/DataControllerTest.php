@@ -34,7 +34,7 @@ class DataControllerTest extends TestCase
         $this->assertIsArray($resp_data);
     }
 
-    public function test_happy_path_service():void
+    public function test_happy_path_process():void
     {
         $payload = [
             'system' => 'CRM',
@@ -45,7 +45,7 @@ class DataControllerTest extends TestCase
                 "name" => "傑思愛德威媒體股份有限公司"
             ]
         ];
-        $response = $this->withoutMiddleware()->post(self::API.'/service', $payload);
+        $response = $this->withoutMiddleware()->post(self::API.'/process', $payload);
 
         $response->assertStatus(200)
             ->assertJsonStructure([]);

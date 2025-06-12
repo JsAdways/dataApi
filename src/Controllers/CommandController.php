@@ -18,7 +18,7 @@ class CommandController
         $serviceApi_routes = [];
         $all_routes = Route::getRoutes();
         foreach ($all_routes as $route){
-            if($this->_is_service_api($route))
+            if($this->_is_process_api($route))
             {
                 $attributes = $this->_get_controller_attribute($route);
                 $api_element = [
@@ -33,9 +33,9 @@ class CommandController
         return ['data'=>$serviceApi_routes];
     }
 
-    protected function _is_service_api(RouteElement $route): bool
+    protected function _is_process_api(RouteElement $route): bool
     {
-        return str_starts_with($route->uri(), 'api/service_api');
+        return str_starts_with($route->uri(), 'api/process_api');
     }
 
     /**

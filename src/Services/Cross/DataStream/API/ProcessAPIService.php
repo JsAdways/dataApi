@@ -1,16 +1,16 @@
 <?php
 
-namespace Jsadways\DataApi\Services\Data;
+namespace Jsadways\DataApi\Services\Cross\DataStream\API;
 
 use Exception;
 use Illuminate\Support\Facades\Http;
 use Jsadways\DataApi\Core\Services\Data\Contracts\DataContract;
-use Jsadways\DataApi\Core\Services\Data\Dtos\ServiceApiDto;
+use Jsadways\DataApi\Core\Services\Data\Dtos\ProcessApiDto;
 
-class ServiceAPIService implements DataContract
+class ProcessAPIService implements DataContract
 {
     public function __construct(
-        protected ServiceApiDto $_payload
+        protected ProcessApiDto $_payload
     )
     {
     }
@@ -22,7 +22,7 @@ class ServiceAPIService implements DataContract
     {
         // TODO: Implement fetch() method.
         $token = $this->_payload->token;
-        $response = Http::withToken($token)->post($this->_payload->api_url,[...$this->_payload->payload]);
+        $response = Http::withToken($token)->post($this->_payload->system_host.'/api/process_api/'.$this->_payload->api,[...$this->_payload->payload]);
 
         $response_result = $response->json();
         if ($response->failed()) {

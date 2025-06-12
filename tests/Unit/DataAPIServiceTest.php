@@ -4,7 +4,7 @@ namespace Jsadways\DataApi\Tests\Unit\DataTest;
 
 use Exception;
 use Jsadways\DataApi\Core\Services\Data\Dtos\DataApiDto;
-use Jsadways\DataApi\Services\Data\DataAPIService;
+use Jsadways\DataApi\Services\Cross\DataStream\API\DataAPIService;
 use Tests\TestCase;
 
 class DataAPIServiceTest extends TestCase
@@ -15,7 +15,7 @@ class DataAPIServiceTest extends TestCase
     public function test_happy_path_fetch():void
     {
         $payload = [
-            'api_url' => 'http://172.16.1.8/js_finance',
+            'system_host' => 'http://172.16.1.8/js_finance',
             'repository' => 'SettingReceiptDollarType',
             'condition' => [
                 "filter" => [
@@ -33,7 +33,7 @@ class DataAPIServiceTest extends TestCase
     public function test_missing_repository()
     {
         $payload = [
-            'api_url' => 'http://172.16.1.8/js_finance',
+            'system_host' => 'http://172.16.1.8/js_finance',
             'repository' => 'SettingReceiptDollarType1',
             'condition' => [
                 "filter" => [

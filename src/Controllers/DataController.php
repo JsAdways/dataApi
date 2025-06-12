@@ -3,6 +3,7 @@
 namespace Jsadways\DataApi\Controllers;
 
 use Exception;
+use Jsadways\DataApi\Core\Services\Data\Dtos\DataApiDto;
 use Jsadways\DataApi\Facades\CrossFacade;
 use Jsadways\LaravelSDK\Core\ReadListParamsDto;
 use App\Core\Repository\ReadListParamsDto as ReadListParamsDtoOLD;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Config;
 use Jsadways\DataApi\Services\Cross\CrossService;
 use Jsadways\DataApi\Repositories\RepositoryManager;
 use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDataDto;
-use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossServiceDto;
+use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossProcessDto;
 
 class DataController
 {
@@ -74,7 +75,7 @@ class DataController
     /**
      * @throws Exception
      */
-    public function service(Request $request): array
+    public function process(Request $request): array
     {
         $payload = $request->validate(
             [
@@ -85,6 +86,6 @@ class DataController
             ]
         );
 
-        return $this->CrossService->service(new CrossServiceDto(...$payload));
+        return $this->CrossService->fetch(new CrossProcessDto(...$payload));
     }
 }
