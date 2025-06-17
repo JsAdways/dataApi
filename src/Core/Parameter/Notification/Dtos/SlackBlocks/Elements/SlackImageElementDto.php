@@ -2,7 +2,11 @@
 
 namespace Jsadways\DataApi\Core\Parameter\Notification\Dtos\SlackBlocks\Elements;
 
-class SlackImageElementDto extends SlackElementDto
+use Jsadways\DataApi\Core\Common\Dto;
+use Jsadways\DataApi\Core\Parameter\Notification\Contracts\SlackContextElementContract;
+use Jsadways\DataApi\Core\Parameter\Notification\Contracts\SlackElementContract;
+
+class SlackImageElementDto  extends Dto implements SlackElementContract,SlackContextElementContract
 {
     public string $type = 'image';
     public function __construct(

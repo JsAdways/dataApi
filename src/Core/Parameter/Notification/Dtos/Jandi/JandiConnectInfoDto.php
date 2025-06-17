@@ -4,7 +4,7 @@ namespace Jsadways\DataApi\Core\Parameter\Notification\Dtos\Jandi;
 
 use Jsadways\DataApi\Core\Common\Dto;
 
-final class ConnectInfoDto extends Dto
+final class JandiConnectInfoDto extends Dto
 {
     public function __construct(
         public readonly string $title,

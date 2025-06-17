@@ -2,7 +2,10 @@
 
 namespace Jsadways\DataApi\Core\Parameter\Notification\Dtos\Line\Template\Action;
 
-final class ActionUriDto extends ActionBaseDto
+use Jsadways\DataApi\Core\Common\Dto;
+use Jsadways\DataApi\Core\Parameter\Notification\Contracts\LineTemplateActionContract;
+
+final class LineUriActionDto extends Dto implements LineTemplateActionContract
 {
     public string $type = 'uri';
     public function __construct(
