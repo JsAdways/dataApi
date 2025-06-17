@@ -3,15 +3,13 @@
 namespace Jsadways\DataApi\Controllers;
 
 use Exception;
-use Jsadways\DataApi\Core\Services\Data\Dtos\DataApiDto;
-use Jsadways\DataApi\Facades\CrossFacade;
+use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossNotificationDto;
 use Jsadways\LaravelSDK\Core\ReadListParamsDto;
 use App\Core\Repository\ReadListParamsDto as ReadListParamsDtoOLD;
 use Jsadways\DataApi\Traits\UseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Jsadways\DataApi\Services\Cross\CrossService;
-use Jsadways\DataApi\Repositories\RepositoryManager;
 use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDataDto;
 use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossProcessDto;
 
@@ -47,6 +45,40 @@ class DataController
     /**
      * @throws Exception
      */
+    public function process(Request $request): array
+    {
+        $payload = $request->validate(
+            [
+                'system' => 'required|string',
+                'api' => 'required|string',
+                'token' => 'required|string',
+                'payload' => 'nullable|array'
+            ]
+        );
+
+        return $this->CrossService->fetch(new CrossProcessDto(...$payload));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function notification(Request $request): array
+    {
+        $payload = $request->validate(
+            [
+                'system' => 'required|string',
+                'token' => 'required|string',
+                'platform' => 'required|string',
+                'payload' => 'nullable|array'
+            ]
+        );
+
+        return $this->CrossService->fetch(new CrossNotificationDto(...$payload));
+    }
+
+    /**
+     * @throws Exception
+     */
     public function get(Request $request): array
     {
         $payload = $request->validate(
@@ -70,22 +102,5 @@ class DataController
         }
 
         return ['data' => $data];
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function process(Request $request): array
-    {
-        $payload = $request->validate(
-            [
-                'system' => 'required|string',
-                'api' => 'required|string',
-                'token' => 'required|string',
-                'payload' => 'nullable|array'
-            ]
-        );
-
-        return $this->CrossService->fetch(new CrossProcessDto(...$payload));
     }
 }

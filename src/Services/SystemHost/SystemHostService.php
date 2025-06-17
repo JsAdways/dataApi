@@ -54,6 +54,10 @@ class SystemHostService implements SystemHostContract
     public function get_api_url(string $name): string
     {
         // TODO: Implement get_api_url() method.
+        if($this->_find_fix_host($name)){
+            return $this->_find_fix_host($name);
+        }
+
         $target_system = $this->system_list->filter(function ($item) use ($name) {
             return $item['name'] == $name;
         })->first();
@@ -68,5 +72,14 @@ class SystemHostService implements SystemHostContract
     public function all(): array
     {
         return $this->system_list->toArray();
+    }
+
+    protected function _find_fix_host(string $name): string | bool
+    {
+        if(Config::has('data_api.fix_host.'.$name)){
+            return Config::get('data_api.fix_host.'.$name);
+        }
+
+        return false;
     }
 }
