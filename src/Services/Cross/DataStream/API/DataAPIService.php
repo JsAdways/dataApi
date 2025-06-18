@@ -5,10 +5,10 @@ namespace Jsadways\DataApi\Services\Cross\DataStream\API;
 use Exception;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
-use Jsadways\DataApi\Core\Services\Data\Contracts\DataContract;
+use Jsadways\DataApi\Core\Services\Data\Contracts\DataStreamContract;
 use Jsadways\DataApi\Core\Services\Data\Dtos\DataApiDto;
 
-class DataAPIService implements DataContract
+class DataAPIService implements DataStreamContract
 {
     public function __construct(
         protected DataApiDto $_payload

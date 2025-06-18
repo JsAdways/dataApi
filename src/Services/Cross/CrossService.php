@@ -3,18 +3,18 @@
 namespace Jsadways\DataApi\Services\Cross;
 
 use Exception;
-use Jsadways\DataApi\Core\Common\PayloadDto;
 use Jsadways\DataApi\Core\Services\Cross\Contracts\CrossContract;
-use Jsadways\DataApi\Core\Services\Data\Contracts\DataContract;
+use Jsadways\DataApi\Core\Services\Cross\Contracts\PayloadContract;
+use Jsadways\DataApi\Core\Services\Data\Contracts\DataStreamContract;
 use Jsadways\DataApi\Services\Cross\DataStream\DataStreamManager;
 use Jsadways\DataApi\Services\SystemHost\SystemHostService;
 use ReflectionException;
 
 class CrossService implements CrossContract
 {
-    protected PayloadDto $payload;
+    protected PayloadContract $payload;
     protected string $system_host;
-    protected DataContract $dataService;
+    protected DataStreamContract $dataStreamService;
     protected DataStreamManager $dataStreamManager;
 
     public function __construct(){
@@ -24,11 +24,11 @@ class CrossService implements CrossContract
     /**
      * 取得資料
      *
-     * @param PayloadDto $payload
+     * @param PayloadContract $payload
      * @return array
      * @throws Exception
      */
-    public function fetch(PayloadDto $payload): array
+    public function fetch(PayloadContract $payload): array
     {
         return $this->_set_payload($payload)
             ->_fetch_system_host()
@@ -39,10 +39,10 @@ class CrossService implements CrossContract
     /**
      * 初始化 payload 資料
      *
-     * @param PayloadDto $payload
+     * @param PayloadContract $payload
      * @return static
      */
-    protected function _set_payload(PayloadDto $payload): static
+    protected function _set_payload(PayloadContract $payload): static
     {
         $this->payload = $payload;
 
@@ -67,7 +67,7 @@ class CrossService implements CrossContract
      */
     protected function _prepare_data_stream(): static
     {
-        $this->dataService = $this->dataStreamManager->get($this->system_host,$this->payload);
+        $this->dataStreamService = $this->dataStreamManager->get($this->system_host,$this->payload);
 
         return $this;
     }
@@ -79,6 +79,6 @@ class CrossService implements CrossContract
      */
     protected function _send(): array
     {
-        return $this->dataService->fetch();
+        return $this->dataStreamService->fetch();
     }
 }

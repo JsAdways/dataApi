@@ -3,6 +3,8 @@
 namespace Jsadways\DataApi\Controllers;
 
 use Exception;
+use Illuminate\Validation\Rule;
+use Jsadways\DataApi\Core\Parameter\Notification\Enums\Platform;
 use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossNotificationDto;
 use Jsadways\LaravelSDK\Core\ReadListParamsDto;
 use App\Core\Repository\ReadListParamsDto as ReadListParamsDtoOLD;
@@ -68,7 +70,7 @@ class DataController
             [
                 'system' => 'required|string',
                 'token' => 'required|string',
-                'platform' => 'required|string',
+                'platform' => ['required', Rule::enum(Platform::class)],
                 'payload' => 'nullable|array'
             ]
         );

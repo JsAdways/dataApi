@@ -4,11 +4,10 @@ namespace Jsadways\DataApi\Services\Cross\DataStream;
 
 use Exception;
 use Jsadways\DataApi\Core\Common\Dto;
-use Jsadways\DataApi\Core\Common\PayloadDto;
-use Jsadways\DataApi\Core\Services\Data\Contracts\DataContract;
+use Jsadways\DataApi\Core\Services\Cross\Contracts\PayloadContract;
+use Jsadways\DataApi\Core\Services\Data\Contracts\DataStreamContract;
 use ReflectionClass;
 use ReflectionException;
-use Throwable;
 
 final class DataStreamManager
 {
@@ -29,12 +28,12 @@ final class DataStreamManager
      * 實例化 Repository
      *
      * @param string $system_host
-     * @param PayloadDto $payload
-     * @return DataContract
+     * @param PayloadContract $payload
+     * @return DataStreamContract
      * @throws ReflectionException
      * @throws Exception
      */
-    public function get(string $system_host,PayloadDto $payload): DataContract
+    public function get(string $system_host,PayloadContract $payload): DataStreamContract
     {
         $data_stream_name = $this->_find_stream_name($payload);
         $data_stream_api_name = $this->_find_stream_api_name($data_stream_name);
@@ -53,7 +52,7 @@ final class DataStreamManager
     /**
      * @throws Exception
      */
-    protected function _find_stream_name(PayloadDto $payload): string
+    protected function _find_stream_name(PayloadContract $payload): string
     {
         $reflection_class = new ReflectionClass($payload);
         $cross_dto_class_name = $reflection_class->getShortName();
@@ -113,12 +112,12 @@ final class DataStreamManager
     /**
      * @throws Exception
      */
-    protected function _build(string $class, Dto $payload): DataContract
+    protected function _build(string $class, Dto $payload): DataStreamContract
     {
         return new $class($payload);
     }
 
-    protected function _payload_merge_data(PayloadDto $payload,string $system_host): array
+    protected function _payload_merge_data(PayloadContract $payload,string $system_host): array
     {
         $payload_item = $payload->get();
         $payload_item['system_host'] = $system_host;

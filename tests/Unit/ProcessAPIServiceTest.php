@@ -3,12 +3,34 @@
 namespace Jsadways\DataApi\Tests\Unit\DataTest;
 
 use Exception;
+use Illuminate\Support\Facades\Http;
 use Jsadways\DataApi\Core\Services\Data\Dtos\ProcessApiDto;
 use Jsadways\DataApi\Services\Cross\DataStream\API\ProcessAPIService;
 use Tests\TestCase;
 
 class ProcessAPIServiceTest extends TestCase
 {
+    const AUTH_PATH = "http://172.16.1.8/js_crm/api/js_auth/login";
+    const LOGIN_PAYLOAD = [
+        "account" => "js_superuser",
+        "password" => "au4a83serveme"
+    ];
+    protected string $token;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->_login();
+    }
+
+    private function _login():void
+    {
+        $login_result = Http::asForm()->post(self::AUTH_PATH, self::LOGIN_PAYLOAD);
+        if($login_result->successful()){
+            $this->token = $login_result->json()["token"];
+        }
+    }
+
     /**
      * @throws Exception
      */
@@ -17,7 +39,7 @@ class ProcessAPIServiceTest extends TestCase
         $payload = [
             'system_host' => 'http://172.16.1.8/js_crm',
             'api' => 'company_verify',
-            'token' => "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTcyLjE2LjEuOC9qc19lbXBsb3llZS9zZXJ2aWNlL2FwaS9sb2dpbiIsImlhdCI6MTc0OTcxOTAxMywiZXhwIjoxNzQ5NzIyNjEzLCJuYmYiOjE3NDk3MTkwMTMsImp0aSI6IkUzcWZsbUY3M0tNSE9vWlIiLCJzdWIiOiIxIiwicHJ2IjoiMTZlNGNkYTM1OGRiNGY3MjQxZTI4NzcxNjBmYjE4MmU1MGNhNmRmZSJ9.iP6eMIzoocYkdOQwAoDngAa0t62rO3Us0FNVxYq345Q",
+            'token' => $this->token,
             'payload' => [
                 "id_number" => "27743336",
                 "name" => "傑思愛德威媒體股份有限公司"
@@ -32,7 +54,8 @@ class ProcessAPIServiceTest extends TestCase
     public function test_missing_token()
     {
         $payload = [
-            'api_url' => 'http://172.16.1.8/js_crm/api/process_api/company_verify',
+            'system_host' => 'http://172.16.1.8/js_crm',
+            'api' => 'company_verify',
             'token' => "Bearer ",
             'payload' => [
                 "id_number" => "27743336",

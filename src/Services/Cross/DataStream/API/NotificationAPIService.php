@@ -4,10 +4,10 @@ namespace Jsadways\DataApi\Services\Cross\DataStream\API;
 
 use Exception;
 use Illuminate\Support\Facades\Http;
-use Jsadways\DataApi\Core\Services\Data\Contracts\DataContract;
+use Jsadways\DataApi\Core\Services\Data\Contracts\DataStreamContract;
 use Jsadways\DataApi\Core\Services\Data\Dtos\NotificationApiDto;
 
-class NotificationAPIService implements DataContract
+class NotificationAPIService implements DataStreamContract
 {
     public function __construct(
         protected NotificationApiDto $_payload

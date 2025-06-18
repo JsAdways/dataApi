@@ -2,7 +2,7 @@
 
 namespace Jsadways\DataApi\Core\Services\Data\Contracts;
 
-interface DataContract
+interface DataStreamContract
 {
     public function fetch(): array;
 }
