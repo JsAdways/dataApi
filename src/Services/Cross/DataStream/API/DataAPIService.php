@@ -29,7 +29,8 @@ class DataAPIService implements DataStreamContract
 
         $response = Http::get($api_end_point, [
             'repository' => $this->_payload->repository,
-            'condition' => json_encode($condition)
+            'condition' => json_encode($condition),
+            'extra' => $this->_payload->extra,
         ]);
 
         $response_result = $response->json();

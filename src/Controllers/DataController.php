@@ -4,8 +4,11 @@ namespace Jsadways\DataApi\Controllers;
 
 use Exception;
 use Illuminate\Validation\Rule;
+use Jsadways\DataApi\Core\Services\Extra\Dtos\RelationPayloadDto;
 use Jsadways\DataApi\Core\Parameter\Notification\Enums\Platform;
 use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossNotificationDto;
+use Jsadways\DataApi\Services\Extra\ExtraService;
+use Jsadways\DataApi\Services\Extra\Function\RelationFunction;
 use Jsadways\LaravelSDK\Core\ReadListParamsDto;
 use App\Core\Repository\ReadListParamsDto as ReadListParamsDtoOLD;
 use Jsadways\DataApi\Traits\UseRepository;
@@ -37,7 +40,7 @@ class DataController
                 'condition.sort_by' => 'nullable|string|',
                 'condition.sort_order' => 'nullable|string|in:asc,desc',
                 'condition.per_page' => 'nullable|integer',
-                'condition.extra' => 'nullable|json',
+                'extra' => 'nullable|json',
             ]
         );
 
@@ -91,16 +94,31 @@ class DataController
                 'condition.sort_by' => 'string|nullable',
                 'condition.sort_order' => 'string|in:asc,desc|nullable',
                 'condition.per_page' => 'integer|nullable',
+                'extra' => 'nullable|json',
             ]
         );
         $condition = json_decode($payload['condition'], true);
         $condition['filter'] = json_encode($condition['filter']);
+        $condition['extra'] = (isset($payload['extra'])) ? json_decode($payload['extra'],true) : [];
 
         $repository_version = intval(config::get('data_api.repository_version'));
         if($repository_version === 0){
             $data = $this->repository($payload['repository'])->read_models(new ReadListParamsDtoOLD(...$condition));
         }else{
-            $data = $this->repository($payload['repository'])->read_models(new ReadListParamsDto(...$condition));
+            $repository_name = $payload['repository'];
+            $relation_payload = new RelationPayloadDto(repository_name:$repository_name);
+            $dto = new ReadListParamsDto(...$condition);
+            $extra_service = new ExtraService(
+                function: new RelationFunction($relation_payload),
+                dto: $dto,
+                key: 'relation'
+            );
+            $assigned_relation = $extra_service->execute();
+
+            $data = $this->repository($payload['repository'])->read_models(
+                params: $dto,
+                relation: $assigned_relation
+            );
         }
 
         return ['data' => $data];
