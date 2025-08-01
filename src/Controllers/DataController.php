@@ -9,7 +9,7 @@ use Jsadways\DataApi\Core\Parameter\Notification\Enums\Platform;
 use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossNotificationDto;
 use Jsadways\DataApi\Services\Extra\ExtraService;
 use Jsadways\DataApi\Services\Extra\Function\RelationFunction;
-use Jsadways\LaravelSDK\Core\ReadListParamsDto;
+use Jsadways\DataApi\Core\ReadListParamsDto;
 use App\Core\Repository\ReadListParamsDto as ReadListParamsDtoOLD;
 use Jsadways\DataApi\Traits\UseRepository;
 use Illuminate\Http\Request;

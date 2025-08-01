@@ -5,7 +5,6 @@ use Exception;
 use Jsadways\DataApi\Core\Services\Extra\Dtos\FunctionPayloadDto;
 use Jsadways\DataApi\Core\Services\Extra\Contracts\FunctionContract;
 use Jsadways\DataApi\Traits\UseRepository;
-use Jsadways\LaravelSDK\Repositories\Repository;
 
 class RelationFunction implements FunctionContract
 {
@@ -31,7 +30,7 @@ class RelationFunction implements FunctionContract
         return null;
     }
 
-    protected function _is_relation_exist(Repository $repository,string $relation_name): bool
+    protected function _is_relation_exist(object $repository,string $relation_name): bool
     {
         return property_exists($repository,$relation_name);
     }

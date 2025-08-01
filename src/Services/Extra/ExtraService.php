@@ -4,7 +4,7 @@ namespace Jsadways\DataApi\Services\Extra;
 
 use Jsadways\DataApi\Core\Services\Extra\Contracts\ExtraContract;
 use Jsadways\DataApi\Core\Services\Extra\Contracts\FunctionContract;
-use Jsadways\LaravelSDK\Core\ReadListParamsDto;
+use Jsadways\DataApi\Core\ReadListParamsDto;
 
 class ExtraService implements ExtraContract
 {
