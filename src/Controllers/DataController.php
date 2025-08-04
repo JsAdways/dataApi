@@ -99,7 +99,7 @@ class DataController
             ]
         );
         $condition = json_decode($payload['condition'], true);
-        $condition['extra'] = (isset($payload['extra'])) ? json_decode($payload['extra'],true) : [];
+        $condition['extra'] = (isset($payload['extra'])) ? $payload['extra'] : [];
         $condition['filter'] = $condition['filter'] ?? [];
         $condition['sort_by'] = $condition['sort_by'] ?? 'id';
         $condition['sort_order'] = $condition['sort_order'] ?? 'asc';
