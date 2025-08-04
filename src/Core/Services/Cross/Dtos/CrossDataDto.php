@@ -11,6 +11,6 @@ final class CrossDataDto extends Dto implements PayloadContract
         public readonly string $system,
         public readonly string $repository,
         public readonly ?array $condition = null,
-        public readonly ?string $extra = '',
+        public readonly ?array $extra = null,
     ) {}
 }

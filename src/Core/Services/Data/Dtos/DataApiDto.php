@@ -10,6 +10,6 @@ final class DataApiDto extends Dto
         public readonly string $system_host,
         public readonly string $repository,
         public readonly ?array $condition = null,
-        public readonly ?string $extra = null,
+        public readonly ?array $extra = null,
     ) {}
 }

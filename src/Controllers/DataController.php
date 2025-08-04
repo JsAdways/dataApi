@@ -41,7 +41,7 @@ class DataController
                 'condition.sort_by' => 'nullable|string|',
                 'condition.sort_order' => 'nullable|string|in:asc,desc',
                 'condition.per_page' => 'nullable|integer',
-                'extra' => 'nullable|json',
+                'extra' => 'nullable|array',
             ]
         );
 
@@ -99,7 +99,7 @@ class DataController
             ]
         );
         $condition = json_decode($payload['condition'], true);
-        $condition['extra'] = (isset($payload['extra'])) ? $payload['extra'] : [];
+        $condition['extra'] = (isset($payload['extra'])) ? json_decode($payload['extra'],true) : [];
         $condition['filter'] = $condition['filter'] ?? [];
         $condition['sort_by'] = $condition['sort_by'] ?? 'id';
         $condition['sort_order'] = $condition['sort_order'] ?? 'asc';
