@@ -9,14 +9,15 @@ use Jsadways\DataApi\Core\Parameter\Notification\Enums\Platform;
 use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossNotificationDto;
 use Jsadways\DataApi\Services\Extra\ExtraService;
 use Jsadways\DataApi\Services\Extra\Function\RelationFunction;
-use Jsadways\DataApi\Core\ReadListParamsDto;
 use App\Core\Repository\ReadListParamsDto as ReadListParamsDtoOLD;
+use Jsadways\DataApi\Services\Relation\RelationService;
 use Jsadways\DataApi\Traits\UseRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Jsadways\DataApi\Services\Cross\CrossService;
 use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossDataDto;
 use Jsadways\DataApi\Core\Services\Cross\Dtos\CrossProcessDto;
+use Throwable;
 
 class DataController
 {
@@ -98,27 +99,44 @@ class DataController
             ]
         );
         $condition = json_decode($payload['condition'], true);
-        $condition['filter'] = json_encode($condition['filter']);
         $condition['extra'] = (isset($payload['extra'])) ? json_decode($payload['extra'],true) : [];
+        $condition['filter'] = $condition['filter'] ?? [];
+        $condition['sort_by'] = $condition['sort_by'] ?? 'id';
+        $condition['sort_order'] = $condition['sort_order'] ?? 'asc';
+        $condition['per_page'] = $condition['per_page'] ?? 30;
 
         $repository_version = intval(config::get('data_api.repository_version'));
         if($repository_version === 0){
             $data = $this->repository($payload['repository'])->read_models(new ReadListParamsDtoOLD(...$condition));
         }else{
             $repository_name = $payload['repository'];
+
+            //handle read relations
+            $relation_service = new RelationService(repository_name:$repository_name);
+            $read_relations = $relation_service->find('__read_relations__');
+
+            //handle extra data
             $relation_payload = new RelationPayloadDto(repository_name:$repository_name);
-            $dto = new ReadListParamsDto(...$condition);
             $extra_service = new ExtraService(
                 function: new RelationFunction($relation_payload),
-                dto: $dto,
+                data: $condition,
                 key: 'relation'
             );
             $assigned_relation = $extra_service->execute();
 
-            $data = $this->repository($payload['repository'])->read_models(
-                params: $dto,
-                relation: $assigned_relation
-            );
+            $relations = $assigned_relation !== Null ? $assigned_relation : $read_relations;
+            try{
+                $model = new ("App\\Models\\".$repository_name);
+                $query = $model
+                    ->query()
+                    ->select(['*'])
+                    ->with($relations)
+                    ->filter($condition['filter'])
+                    ->orderBy($condition['sort_by'], $condition['sort_order']);
+                $data =  ($condition['per_page'] > 0) ? $query->paginate($condition['per_page'], ['*'], 'page') : $query->get();
+            } catch (Throwable $throwable) {
+                throw new Exception("{$repository_name}查詢錯誤: {$throwable->getMessage()}");
+            }
         }
 
         return ['data' => $data];

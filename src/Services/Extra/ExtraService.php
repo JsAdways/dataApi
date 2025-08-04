@@ -4,20 +4,26 @@ namespace Jsadways\DataApi\Services\Extra;
 
 use Jsadways\DataApi\Core\Services\Extra\Contracts\ExtraContract;
 use Jsadways\DataApi\Core\Services\Extra\Contracts\FunctionContract;
-use Jsadways\DataApi\Core\ReadListParamsDto;
 
 class ExtraService implements ExtraContract
 {
     protected mixed $target_data = false;
     public function __construct(
         protected FunctionContract $function,
-        protected ReadListParamsDto $dto,
+        protected array $data,
         protected string $key,
     ){}
 
     public function _find_extra_data(): static
     {
-        $this->target_data = $this->dto->from_extra_get($this->key, false);
+        if (array_key_exists($this->key, $this->data['extra']))
+        {
+            $this->target_data = $this->data['extra'][$this->key];
+        }
+        else{
+            $this->target_data = false;
+        }
+
         return $this;
     }
 

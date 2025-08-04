@@ -3,6 +3,7 @@
 namespace Jsadways\DataApi\Repositories;
 
 use Exception;
+use Throwable;
 
 final class RepositoryManager
 {
@@ -19,8 +20,8 @@ final class RepositoryManager
             $namespace = 'App\\Repositories\\';
             $repository = "{$namespace}{$name}" . "Repository";
             return new $repository;
-        } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
+        } catch (Throwable $throwable) {
+            throw new Exception($throwable->getMessage());
         }
 
     }
