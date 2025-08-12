@@ -98,7 +98,9 @@ final class DataStreamManager
         $constructor_parameters = $reflection_class->getConstructor()->getParameters();
         return collect($constructor_parameters)->reduce(function ($result, $parameter_item) use ($payload_item) {
             $key = $parameter_item->getName();
-            $result[$key] = $payload_item[$key];
+            if(isset($payload_item[$key])){
+                $result[$key] = $payload_item[$key];
+            }
 
             return $result;
         },[]);
