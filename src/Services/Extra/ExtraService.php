@@ -4,6 +4,7 @@ namespace Jsadways\DataApi\Services\Extra;
 
 use Jsadways\DataApi\Core\Services\Extra\Contracts\ExtraContract;
 use Jsadways\DataApi\Core\Services\Extra\Contracts\FunctionContract;
+use Throwable;
 
 class ExtraService implements ExtraContract
 {
@@ -16,11 +17,15 @@ class ExtraService implements ExtraContract
 
     public function _find_extra_data(): static
     {
-        if (array_key_exists($this->key, $this->data['extra']))
-        {
-            $this->target_data = $this->data['extra'][$this->key];
-        }
-        else{
+        try{
+            if (array_key_exists($this->key, $this->data['extra']))
+            {
+                $this->target_data = $this->data['extra'][$this->key];
+            }
+            else{
+                $this->target_data = false;
+            }
+        }catch (Throwable $throwable){
             $this->target_data = false;
         }
 
