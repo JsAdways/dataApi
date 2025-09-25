@@ -10,8 +10,8 @@ final class EmailPayloadDto extends Dto
         public readonly array $receiver,
         public readonly string $title,
         public readonly string $content,
-        public readonly ?array $cc = null,
-        public readonly ?array $bcc = null,
+        public readonly ?array $cc = [],
+        public readonly ?array $bcc = [],
         public readonly ?array $attach_file = null
     ) {}
 }
